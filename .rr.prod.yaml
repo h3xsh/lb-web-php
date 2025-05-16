@@ -1,0 +1,33 @@
+version: "3"
+
+server:
+  command: "php /app/psr-worker.php"
+  env:
+    APP_HEADER_TRACE_ID_NAME: "X-SERVER-TRACE-ID"
+    APP_HEADER_CDN_VERIFICATION_API_KEY_NAME: "X-CDN-VERIFICATION-API-KEY"
+    APP_HEADER_CDN_VERIFICATION_API_SECRET_NAME: "X-CDN-VERIFICATION-API-SECRET"
+    APP_ENV_SITE_TITLE: "h3xsh/lb-web-php"
+    APP_ENV_SITE_COPYRIGHT_YEAR: "2025"
+    APP_ENV_SITE_COPYRIGHT_NAME: "h3xsh"
+    APP_ENV_SITE_COPYRIGHT_URL: "https://h3x.sh"
+
+http:
+  address: 0.0.0.0:8080
+  middleware: ["static"]
+  static:
+    dir: "/app/src/public"
+    calculate_etag: false
+    allow: [".webmanifest", ".png", ".ico", ".svg"]
+  pool:
+    debug: false
+    num_workers: 1
+    max_jobs: 64
+    allocation_timeout: 180s
+    destroy_timeout: 120s
+
+logs:
+  mode: production
+  level: error
+  encoding: console
+  output: stderr
+  err_output: stderr
